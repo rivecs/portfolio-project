@@ -5,64 +5,95 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width,initial-scale=1" name="viewport"/>
     <meta content="dark light" name="color-scheme"/>
-    
-    <title>Demo UI Portfolio</title>
-    
+
+    <title>Chris' Portfolio</title>
+
     <link crossorigin="" href="https://api.github.com" rel="preconnect"/>
     <link href="/assets/css/styles.css" rel="stylesheet">
-    
-    <meta content="Demo UI Portfolio" property="og:title"/>
+
+    <meta content="Chris Rivers Portfolio" property="og:title"/>
     <meta content="Production-minded code, written to hold up under review." property="og:description"/>
-    </link>
   </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
   <header class="topbar">
-    <div class="wrap topbar__inner">
+    <div class="topbar__inner">
       <div class="brand">
-        <img src="assets/images/logo/chris-grey-1024.png" class="port-logo">
+        <img src="/assets/images/logo/avatar-512.webp" class="port-logo"/>
         <div class="brand__text">
-          <div class="brand__name">Chris Rivers' Portfolio/Demo</div>
+          <div class="brand__name">Chris Rivers</div>
           <div class="brand__tag">Readable systems. Predictable behavior.</div>
+        </div>
+        <div class="header-controls">
+            <button
+              class="btn btn--ghost"
+              id="themeToggle"
+              type="button"
+              aria-pressed="false">
+              <span class="btn__icon" aria-hidden="true">◐</span>
+              <span class="btn__text">Theme</span>
+            </button>
+            <button
+              class="hamburger"
+              id="menuToggle"
+              aria-label="Open menu"
+              aria-expanded="false"
+              aria-controls="siteMenu">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+        </div>
       </div>
     </div>
-    <nav aria-label="Primary" class="nav">
-      <a href="#projects">Projects</a>
-      <a href="#tech">Tech</a>
-      <a href="#proof">Notes</a>
-      <a href="#contact">Contact</a>
-      <button aria-pressed="false" class="btn btn--ghost" id="themeToggle" type="button">
-        <span aria-hidden="true" class="btn__icon">◐</span>
-        <span class="btn__text">Theme</span>
-      </button>
-    </nav>
-    </div>
   </header>
+
+  <div class="menu-backdrop" id="menuBackdrop" hidden></div>
+    <aside class="menu-drawer" id="siteMenu" aria-hidden="true">
+      <div class="menu-header">
+        <h3 class="menu-title">Navigation</h3>
+        <button
+          class="menu-close"
+          type="button"
+          aria-label="Close menu"
+          id="menuCloseBtn">
+          x
+        </button>
+      </div>
+      <nav class="menu-nav" aria-label="Main menu">
+        <a href="#projects" data-icon="repo">Repositories</a>
+        <a href="#tech" data-icon="tech">Tech</a>
+        <a href="#proof" data-icon="notes">Notes</a>
+        <a href="/assets/pdf/resume/chris-rivers-resume.pdf" target="_blank" data-icon="resume">Resume</a>
+        <a href="#contact" data-icon="contact">Contact</a>
+      </nav>
+    </aside>
+
   <main class="wrap" id="main">
 
   <!-- HERO -->
     <section aria-label="Intro" class="hero">
       <div class="hero__left">
         <h1 class="hero__title">
-          This is production-minded code.<br/>
-          <span class="muted">If something breaks, it’s fixable without rewriting everything.</span>
+          This is production-minded code.
         </h1>
+        <span class="hero__muted">If something breaks, it’s fixable without rewriting everything.</span><br/>
         <p class="hero__blurb">
           This site exists to show how I think when building real systems:
           minimal dependencies, predictable behavior, and decisions that hold up under review.
           Nothing here is accidental.
         </p>
         <div class="hero__cta">
-          <a class="btn" href="#projects">View selected work</a>
+          <a class="btn" href="#projects">Selected work</a>
           <a class="btn btn--ghost" href="https://github.com/rivecs" rel="noreferrer" target="_blank">
             GitHub
           </a>
+          <a class="btn btn--ghost" href="/assets/pdf/resume/chris-rivers-resume.pdf">View my Resume</a>
         </div>
         <div class="chips">
           <span class="chip">Vanilla JS by choice</span>
           <span class="chip">API-driven UI</span>
           <span class="chip">Accessible by default</span>
-          <span class="chip">Dark-first</span>
         </div>
       </div>
       <div aria-hidden="true" class="hero__right">
@@ -75,33 +106,119 @@
             </div>
             <div class="panel__body">
               <div class="stat">
-                <div class="stat__label">Build approach</div>
-                <div class="stat__value">Ship → observe → correct</div>
-              </div>
-              <div class="stat">
-                <div class="stat__label">Motion</div>
-                <div class="stat__value">Used only when it clarifies</div>
-              </div>
-              <div class="stat">
-                <div class="stat__label">Repo source</div>
-                <div class="stat__value">Live GitHub API</div>
-              </div>
-              <div class="stat">
-                <div class="stat__label">Failure handling</div>
-                <div class="stat__value">Graceful, explained</div>
-              </div>
-          </div>
+                  <div class="stat__label">Build approach</div>
+                  <div class="stat__value">
+                    <span class="tip" tabindex="0"
+                      data-tip="SHIP
+                Get it into real use.
+                Not perfect. Not reckless.
+                Complete enough to stand behind.">
+                      Ship
+                    </span>
+                    <span class="arrow"> → </span>
+                    <span class="tip" tabindex="0"
+                      data-tip="OBSERVE
+                Watch what reality says.
+                Logs, behavior, failures.
+                Not guesses. Not vibes.">
+
+                      Observe
+                    </span>
+                    <span class="arrow"> → </span>
+                    <span class="tip" tabindex="0"
+                      data-tip="CORRECT
+                Fix what actually happened.
+                Small, targeted changes.
+                Not a rewrite, not a panic.">
+                      Correct
+                    </span>
+                  </div>
+                </div>
+
+                <div class="stat">
+                  <div class="stat__label">Motion</div>
+                  <div class="stat__value">
+                    <span class="tip" tabindex="0"
+                      data-tip="USED ONLY
+                Motion has a cost.
+                If it doesn’t add clarity, it doesn’t belong.">
+                      Used only
+                    </span>
+                    <span class="arrow"> when </span>
+                    <span class="tip" tabindex="0"
+                      data-tip="CLARIFIES
+                Reinforces meaning.
+                Guides attention.
+                Never decorative noise.">
+                      it clarifies
+                    </span>
+                  </div>
+                </div>
+
+                <div class="stat">
+                  <div class="stat__label">Repo source</div>
+                  <div class="stat__value">
+                    <span class="tip" tabindex="0"
+                      data-tip="LIVE
+                Fetched at runtime.
+                No screenshots.
+                No frozen data.">
+                      Live
+                    </span>
+                    <span class="arrow"> </span>
+                    <span class="tip" tabindex="0"
+                      data-tip="GITHUB API
+                Real repositories.
+                Real metadata.
+                What’s there is what exists.">
+                      GitHub API
+                    </span>
+                  </div>
+                </div>
+
+                <div class="stat">
+                  <div class="stat__label">Failure handling</div>
+                  <div class="stat__value">
+                    <span class="tip" tabindex="0"
+                      data-tip="GRACEFUL
+                No hard crashes.
+                Clear fallbacks.
+                The app stays usable.">
+                      Graceful
+                    </span>
+                    <span class="arrow">, </span>
+                    <span class="tip" tabindex="0"
+                      data-tip="EXPLAINED
+                Errors tell you what happened.
+                No silent failures.
+                No guesswork.">
+                      explained
+                    </span>
+                  </div>
+                </div>
+            </div>
         </div>
       </div>
+    </section>
+
+    <section class="section" id="featured">
+      <div class="section__head">
+        <h2>Public Wrapper Repos</h2>
+        <p class="muted">
+          These are the cleaned-up public repos I would hand somebody first.
+          The deeper working repos still exist, but these are the easier inspection entry points.
+        </p>
+      </div>
+      <div class="grid" id="featuredGrid"></div>
     </section>
 
   <!-- PROJECTS -->
     <section class="section" id="projects">
       <div class="section__head">
-        <h2>Selected Projects</h2>
+        <h2>Repositories</h2>
         <p class="muted">
-          Data is pulled live from GitHub. If the API rate-limits or flakes out,
-          the UI degrades cleanly instead of falling over.
+          Data is pulled live from GitHub. The public wrapper repos are prioritized when available.
+          If the API rate-limits or flakes out, the UI degrades cleanly instead of falling over.
         </p>
       </div>
       <div class="toolbar">
@@ -196,59 +313,6 @@
       </div>
     </section>
 
-    <!-- ARCHITECTURE SNAPSHOT -->
-    <section class="section" id="architecture">
-      <div class="section__head">
-        <h2>Architecture Snapshot</h2>
-        <p class="muted">
-          Paste a project structure or high-level overview.
-          This analyzes how the system is shaped, not how pretty the code is.
-        </p>
-      </div>
-      <div class="card arch">
-      <form autocomplete="off" class="arch__form" id="archForm">
-        <div class="arch__row">
-          <label class="arch__label" for="archInput">Input</label>
-          <textarea class="input arch__input" id="archInput" placeholder="Paste a directory tree or brief architecture description here.
-          Focus on structure, boundaries, and responsibility split." rows="10" spellcheck="false"></textarea>
-        </div>
-        <div class="arch__actions">
-          <button class="btn" id="archBtn">Analyze Architecture</button>
-          <button class="btn btn--ghost" id="archClear" type="button">Clear</button>
-          <div aria-live="polite" class="arch__status muted" id="archStatus"></div>
-        </div>
-      </form>
-      <div class="arch__out" hidden="" id="archOut">
-          <div class="arch__grid">
-          <article class="card arch__card">
-            <h3>System Overview</h3>
-            <p class="arch__text" id="archSummary"></p>
-          </article>
-          <article class="card arch__card">
-            <h3>Detected Patterns</h3>
-            <ul class="arch__list" id="archPatterns"></ul>
-          </article>
-          <article class="card arch__card">
-            <h3>What’s Working</h3>
-            <ul class="arch__list" id="archStrengths"></ul>
-          </article>
-          <article class="card arch__card">
-            <h3>Primary Risk</h3>
-            <p class="arch__text" id="archRisk"></p>
-          </article>
-          <article class="card arch__card">
-            <h3>One Practical Improvement</h3>
-            <p class="arch__text" id="archImprove"></p>
-          </article>
-          </div>
-          <p class="muted arch__foot">
-            This is an automated architectural read.
-            It favors clarity and constraints over speculation.
-          </p>
-        </div>
-      </div>
-    </section>
-
     <!-- CONTACT -->
     <section class="section" id="contact">
       <div class="section__head">
@@ -272,12 +336,12 @@
 
     <footer class="footer">
       <div class="muted">
-        Built to be readable, debuggable, and boring in the right ways.
+        Built to be readable, debuggable, and boring in <i>just</i> the right ways.
       </div>
     </footer>
 
   </main>
-  
+
   <script defer="" src="/assets/js/app.js"></script>
 </body>
 </html>

@@ -72,9 +72,51 @@
   const sortSelect = $("#sort");
   const statusEl = $("#status");
   const gridEl = $("#repoGrid");
+  const featuredGridEl = $("#featuredGrid");
 
   const CACHE_KEY = "demo-ui-repo-cache-v1";
   const CACHE_USER_KEY = "demo-ui-user-v1";
+
+  const FEATURED_WRAPPERS = [
+    {
+      repo: "my-pattern-pal-public",
+      title: "My Pattern Pal",
+      description: "Mobile-first pattern viewing and adjustment work built around PDF rendering, calibration, measuring, tracing, and pattern-specific logic.",
+      tags: ["Expo", "React Native", "PDF / calibration"],
+    },
+    {
+      repo: "vaper-forge-public",
+      title: "Vaper Forge",
+      description: "A local-business site built to drive actual store visits with stronger visual direction, better first-visit UX, and cleaner action paths.",
+      tags: ["Local business UX", "Vanilla JS", "Custom front end"],
+    },
+    {
+      repo: "cahaba-fire-co-public",
+      title: "Cahaba Fire Company",
+      description: "Product-first storefront and marketing work for a specialty rescue-gear business where clarity and conversion mattered more than flashy tooling.",
+      tags: ["Storefront", "Product-first IA", "Vanilla JS"],
+    },
+    {
+      repo: "turningpointtattoos-public",
+      title: "Turning Point Tattoos",
+      description: "A brand-heavy local-business site where atmosphere mattered, but not at the expense of usability, map/call flows, or booking intent.",
+      tags: ["Brand-heavy UI", "Local business", "Front-end direction"],
+    },
+    {
+      repo: "fitcity-leeds-public",
+      title: "Fit City Movement & Arts",
+      description: "A softer service-business site built around clarity, tone control, and making multiple offerings easy to understand and act on.",
+      tags: ["Service business", "Tone control", "Vanilla JS"],
+    },
+    {
+      repo: "webdiggity-api-public",
+      title: "WebDiggity API",
+      description: "The public wrapper around the assistant-platform backend work, covering multi-business assistant logic, widget delivery, and admin-side foundations.",
+      tags: ["Platform work", "Next.js", "Supabase"],
+    },
+  ];
+
+  const FEATURED_REPO_NAMES = FEATURED_WRAPPERS.map((item) => item.repo.toLowerCase());
 
   // This is state. It's not Redux. It's not complicated. It's fine.
   const state = {
@@ -177,12 +219,17 @@
   }
 
   function getPinnedLike(repos, max = 9) {
-    // “Pinned” approximation:
-    // pick high-signal repos by stars, then by recent updates.
-    // Not perfect, but it’s consistent and explainable.
-    return [...repos]
-      .sort((a, b) => (b.stargazers_count - a.stargazers_count) || (Date.parse(b.updated_at) - Date.parse(a.updated_at)))
-      .slice(0, max);
+    const byName = new Map(repos.map((repo) => [repo.name.toLowerCase(), repo]));
+    const featured = FEATURED_REPO_NAMES
+      .map((name) => byName.get(name))
+      .filter(Boolean);
+
+    const featuredIds = new Set(featured.map((repo) => repo.id));
+    const rest = [...repos]
+      .filter((repo) => !featuredIds.has(repo.id))
+      .sort((a, b) => (b.stargazers_count - a.stargazers_count) || (Date.parse(b.updated_at) - Date.parse(a.updated_at)));
+
+    return [...featured, ...rest].slice(0, max);
   }
 
   function sortRepos(repos, mode) {
@@ -264,6 +311,35 @@
     }
 
     gridEl.innerHTML = repos.map(cardTemplate).join("");
+  }
+
+  function featuredCardTemplate(item) {
+    const repoUrl = `https://github.com/rivecs/${encodeURIComponent(item.repo)}`;
+    const tags = (item.tags || [])
+      .map((tag) => `<span class="project-tag">${escapeHtml(tag)}</span>`)
+      .join("");
+
+    return `
+      <article class="card card--feature">
+        <div class="card__eyebrow">Public wrapper repo</div>
+        <div class="card__top">
+          <a class="card__name" href="${escapeHtmlAttr(repoUrl)}" target="_blank" rel="noreferrer">
+            ${escapeHtml(item.title)}
+          </a>
+          <span class="badge">GitHub</span>
+        </div>
+        <p class="desc">${escapeHtml(item.description)}</p>
+        <div class="project-tags">${tags}</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="badge" href="${escapeHtmlAttr(repoUrl)}" target="_blank" rel="noreferrer">Open repo</a>
+        </div>
+      </article>
+    `;
+  }
+
+  function renderFeaturedWrappers() {
+    if (!featuredGridEl) return;
+    featuredGridEl.innerHTML = FEATURED_WRAPPERS.map(featuredCardTemplate).join("");
   }
 
   async function loadLive() {
@@ -350,7 +426,7 @@
   // -----------------------------
   function boot() {
     initTheme();
-    $("#year").textContent = String(new Date().getFullYear());
+    renderFeaturedWrappers();
 
     // Try to prefill username from last time because typing is a chore.
     try {
@@ -522,4 +598,39 @@
   } else {
     bootArch();
   }
+})();
+
+(function(){
+  const toggle = document.getElementById("menuToggle");
+  const drawer = document.getElementById("siteMenu");
+  const backdrop = document.getElementById("menuBackdrop");
+  const closeBtn = document.getElementById("menuCloseBtn");
+
+  if (!toggle || !drawer || !backdrop) return;
+
+  function openMenu(){
+    drawer.classList.add("open");
+    drawer.setAttribute("aria-hidden", "false");
+    toggle.setAttribute("aria-expanded", "true");
+    backdrop.hidden = false;
+  }
+
+  function closeMenu(){
+    drawer.classList.remove("open");
+    drawer.setAttribute("aria-hidden", "true");
+    toggle.setAttribute("aria-expanded", "false");
+    backdrop.hidden = true;
+  }
+
+  toggle.addEventListener("click", () => {
+    drawer.classList.contains("open") ? closeMenu() : openMenu();
+  });
+
+  backdrop.addEventListener("click", closeMenu);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeMenu();
+  });
+
+  if (closeBtn) closeBtn.addEventListener("click", closeMenu);
 })();
